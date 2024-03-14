@@ -32,7 +32,7 @@ path doit correspondre à la chaine de caractère du chemin vers un fichier .map
 (x1,y1),(x2,y2) sont des coordonées des points du fichier compris dans la taille du fichier .map
 Si les coordonées sont des cases impraticable elles rendront un chemin vide
 
-Si un chemin existe alors le terminal affichera un vecteur de coordonnées représentant le chemin trouver via l'algo et un image en couleur sera généré dans un dossier test
+Si un chemin existe alors le terminal affichera un vecteur de coordonnées représentant le chemin trouver via l'algo et un image en couleur sera généré dans un dossier tests
 
 # Exemples
 
