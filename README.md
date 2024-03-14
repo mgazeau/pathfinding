@@ -15,7 +15,7 @@ Images
 
 ## Exécution du Code
 
-Dans un REPL il faut include les 4 fichiers du dossier sources dans l'ordre suivant : 
+Dans un REPL il faut includr les 4 fichiers du dossier sources dans l'ordre suivant : 
 include("src/parseur.jl")
 include("src/creation_image.jl)
 include("src/recherche_aveugle.jl")
@@ -28,7 +28,7 @@ Les 3 fonctions à utilisées sont :
 2. recherche_dijkstra("path",(x1,y1), (x2,y2))
 3. recherche_a_etoile("path",(x1,y1), (x2,y2))
 
-path doit correspondre à la chaine de caractère du chemin vers un fichier .map (Supporte les fichiers .map comprenants les caractères : {'@','T','.','W','S'})
+path doit correspondre à la chaine de caractère du chemin vers un fichier .map (Supporte les fichiers .map contenants les caractères : {'@','T','.','W','S'})
 (x1,y1),(x2,y2) sont des coordonées des points du fichier compris dans la taille du fichier .map
 Si les coordonées sont des cases impraticable elles rendront un chemin vide
 
@@ -38,5 +38,5 @@ Si un chemin existe alors le terminal affichera un vecteur de coordonnées repr�
 
 Dans le dossier exemple il y a les 3 images résultantes des instructions ci-desssous 
 1. recherche_aveugle("dat/theglaive.map",(88,263), (419,221))
-1. recherche_dijkstra("dat/theglaive.map",(88,263), (419,221))
-1. recherche_a_etoile("dat/theglaive.map",(88,263), (419,221))
+2. recherche_dijkstra("dat/theglaive.map",(88,263), (419,221))
+3. recherche_a_etoile("dat/theglaive.map",(88,263), (419,221))
