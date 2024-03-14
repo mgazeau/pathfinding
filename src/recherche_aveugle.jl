@@ -56,7 +56,7 @@ function recherche_aveugle(fichier::String,depart::Tuple{Int64,Int64}, arrivee::
 
         #création de l'image avec le chemin
         image = matrice_to_image(carte, chemin, arrivee, depart)
-        save_image(image,"test/chemin_aveugle.png")
+        save_image(image,"tests/chemin_aveugle.png")
 	else
 	    println("Pas de chemin possible")
 	end
