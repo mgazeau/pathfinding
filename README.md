@@ -17,7 +17,7 @@ Les algorithmes implémentés sont :
 
 Dans un REPL il faut includr les 4 fichiers du dossier sources dans l'ordre suivant : 
 1. include("src/parseur.jl")
-2. include("src/creation_image.jl)
+2. include("src/creation_image.jl")
 3. include("src/recherche_aveugle.jl")
 4. include("src/recherche_informee.jl")
 
