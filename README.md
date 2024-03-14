@@ -16,10 +16,10 @@ Les algorithmes implémentés sont :
 ## Exécution du Code
 
 Dans un REPL il faut includr les 4 fichiers du dossier sources dans l'ordre suivant : 
-include("src/parseur.jl")
-include("src/creation_image.jl)
-include("src/recherche_aveugle.jl")
-include("src/recherche_informee.jl")
+1. include("src/parseur.jl")
+2. include("src/creation_image.jl)
+3. include("src/recherche_aveugle.jl")
+4. include("src/recherche_informee.jl")
 
 Il est maintenant possible d'utiliser les 3 fonctions de recherches de plus court chemin.
 Elles prennent en paramètre le chemin vers un fichier .map et deux tuples représentant les coordonnées du point de départ et du point d'arrivée.
