@@ -15,7 +15,7 @@ Les algorithmes implémentés sont :
 
 ## Exécution du Code
 
-Dans un REPL il faut includr les 4 fichiers du dossier sources dans l'ordre suivant : 
+Une fois dans le dossier pathfinding dans un REPL il faut inclure les 4 fichiers du dossier sources dans l'ordre suivant : 
 1. include("src/parseur.jl")
 2. include("src/creation_image.jl")
 3. include("src/recherche_aveugle.jl")
@@ -32,7 +32,7 @@ path doit correspondre à la chaine de caractère du chemin vers un fichier .map
 (x1,y1),(x2,y2) sont des coordonées des points du fichier compris dans la taille du fichier .map
 Si les coordonées sont des cases impraticable elles rendront un chemin vide
 
-Si un chemin existe alors le terminal affichera un vecteur de coordonnées représentant le chemin trouver via l'algo et un image en couleur sera généré dans le dossier test
+Si un chemin existe alors le terminal affichera un vecteur de coordonnées représentant le chemin trouver via l'algo et un image en couleur sera généré dans un dossier test
 
 # Exemples
 
