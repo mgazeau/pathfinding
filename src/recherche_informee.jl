@@ -154,7 +154,7 @@ function recherche_dijkstra(fichier::String,depart::Tuple{Int64,Int64}, arrivee:
 
         #création de l'image avec le chemin
         image = matrice_to_image(carte, chemin, arrivee, depart)
-        save_image(image,"chemin_dijkstra.png")
+        save_image(image,"tests/chemin_dijkstra.png")
 	else
 	    println("Pas de chemin possible")
 	end
@@ -281,11 +281,11 @@ function recherche_a_etoile(fichier::String,depart::Tuple{Int64,Int64}, arrivee:
 
         #création de l'image avec le chemin
         image = matrice_to_image(carte, chemin, arrivee, depart)
-        save_image(image,"chemin_A*.png")
+        save_image(image,"tests/chemin_A*.png")
 	else
 	    println("Pas de chemin possible")
 	end
 end
 
 
-recherche_aveugle("theglaive.map",(88,263), (419,221))
+

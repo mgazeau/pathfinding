@@ -1,7 +1,7 @@
 using FileIO
 
 """
-Fonction qui transforme le contenu d'un fichier map comprenant les caractère {'@','T','.','W'} en matrice d'entier 
+Fonction qui transforme le contenu d'un fichier map comprenant les caractère {'@','T','.','W','S'} en matrice d'entier 
 """
 function lire_fichier_map(nom_fichier::String)
 
