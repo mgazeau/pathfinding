@@ -9,9 +9,9 @@ Les algorithmes implémentés sont :
 
 ## Packages Nécessaires
 
-FileIO
-Colors
-Images
+1. FileIO
+2. Colors
+3. Images
 
 ## Exécution du Code
 
