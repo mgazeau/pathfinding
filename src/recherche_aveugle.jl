@@ -34,7 +34,7 @@ function flood_fill(carte::Matrix{Int64}, depart::Tuple{Int64,Int64}, arrivee::T
         for (dx::Int64, dy::Int64) in directions
             n_x, n_y = x + dx, y + dy
 
-            if 1 <= n_x <= m && 1 <= n_y <= n && (carte[n_x, n_y] == 1 || carte[n_x, n_y] == 2)
+            if 1 <= n_x <= m && 1 <= n_y <= n && (carte[n_x, n_y] == 1 || carte[n_x, n_y] == 2 || carte[n_x, n_y] == 3)
             	#Si la case voisine est praticable alors on ajoute dans la file de de traitement de nos chemins
                 push!(file, ((n_x, n_y), distance + 1, vcat(chemin, [(n_x, n_y)])))
             end
