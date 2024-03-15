@@ -41,7 +41,7 @@ Si un chemin existe alors le terminal affichera :
 
 # Exemples
 
-Dans le dossier exemple il y a les 6 images résultantes des instructions ci-desssous 
+Quelques exemples sont stockés dans le dossier exemple : les images correspondent aux instructions ci-desssous 
 1. recherche_aveugle("dat/theglaive.map",(189,193), (226,437))
 2. recherche_aveugle("dat/theglaive.map",(88,263), (419,221))
 3. recherche_dijkstra("dat/theglaive.map",(189,193), (226,437))
