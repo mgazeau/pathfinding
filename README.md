@@ -41,7 +41,10 @@ Si un chemin existe alors le terminal affichera :
 
 # Exemples
 
-Dans le dossier exemple il y a les 3 images résultantes des instructions ci-desssous 
-1. recherche_aveugle("dat/theglaive.map",(88,263), (419,221))
-2. recherche_dijkstra("dat/theglaive.map",(88,263), (419,221))
-3. recherche_a_etoile("dat/theglaive.map",(88,263), (419,221))
+Dans le dossier exemple il y a les 6 images résultantes des instructions ci-desssous 
+1. recherche_aveugle("dat/theglaive.map",(189,193), (226,437))
+2. recherche_aveugle("dat/theglaive.map",(88,263), (419,221))
+3. recherche_dijkstra("dat/theglaive.map",(189,193), (226,437))
+4. recherche_dijkstra("dat/theglaive.map",(88,263), (419,221))
+5. recherche_a_etoile("dat/theglaive.map",(189,193), (226,437))
+6. recherche_a_etoile("dat/theglaive.map",(88,263), (419,221))
