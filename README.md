@@ -33,7 +33,7 @@ path doit correspondre à la chaine de caractère du chemin vers un fichier .map
 Si les coordonées sont des cases impraticable elles rendront un chemin vide.  
 
 Si un chemin existe alors le terminal affichera :
-1. Le nombre de cases visitées
+1. Le nombre d'opérations effectuées
 2. Un vecteur de coordonnées représentant le chemin trouver via l'algo
 3. La taille du chemin trouvé
 4. Temps d'éxécution de l'algorithme
