@@ -1,6 +1,6 @@
 # pathfinding
 
-Ce projet implémente en Julia trois algorithmes pour trouver le plus court chemin entre deux cases à partir d'un fichier avec l'extension .map. 
+Ce projet implémente en Julia trois algorithmes pour trouver le plus court chemin entre deux cases à partir d'un fichier avec l'extension .map   
 Les algorithmes implémentés sont :
 
 1. Recherche Aveugle : Floodfill
@@ -21,8 +21,8 @@ Une fois dans le dossier pathfinding dans un REPL il faut inclure les 4 fichiers
 3. include("src/recherche_aveugle.jl")
 4. include("src/recherche_informee.jl")
 
-Il est maintenant possible d'utiliser les 3 fonctions de recherches de plus court chemin.
-Elles prennent en paramètre le chemin vers un fichier .map et deux tuples représentant les coordonnées du point de départ et du point d'arrivée.
+Il est maintenant possible d'utiliser les 3 fonctions de recherches de plus court chemin.  
+Elles prennent en paramètre le chemin vers un fichier .map et deux tuples représentant les coordonnées du point de départ et du point d'arrivée.  
 Les 3 fonctions à utilisées sont :
 1. recherche_aveugle("path",(x1,y1), (x2,y2))
 2. recherche_dijkstra("path",(x1,y1), (x2,y2))
