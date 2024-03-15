@@ -28,11 +28,16 @@ Les 3 fonctions à utilisées sont :
 2. recherche_dijkstra("path",(x1,y1), (x2,y2))
 3. recherche_a_etoile("path",(x1,y1), (x2,y2))
 
-path doit correspondre à la chaine de caractère du chemin vers un fichier .map (Supporte les fichiers .map contenants les caractères : {'@','T','.','W','S'})
-(x1,y1),(x2,y2) sont des coordonées des points du fichier compris dans la taille du fichier .map
-Si les coordonées sont des cases impraticable elles rendront un chemin vide
+. path doit correspondre à la chaine de caractère du chemin vers un fichier .map (Supporte les fichiers .map contenants les caractères : {'@','T','.','W','S'})
+. (x1,y1),(x2,y2) sont des coordonées des points du fichier compris dans la taille du fichier .map
+. Si les coordonées sont des cases impraticable elles rendront un chemin vide
 
-Si un chemin existe alors le terminal affichera un vecteur de coordonnées représentant le chemin trouver via l'algo et un image en couleur sera généré dans un dossier tests
+Si un chemin existe alors le terminal affichera :
+1. Le nombre de cases visitées
+2. Un vecteur de coordonnées représentant le chemin trouver via l'algo
+3. La taille du chemin trouvé
+4. Temps d'éxécution de l'algorithme
+5. une image en couleur sera généré dans un dossier tests
 
 # Exemples
 
