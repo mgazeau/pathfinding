@@ -29,15 +29,15 @@ Les 3 fonctions à utilisées sont :
 3. recherche_a_etoile("path",(x1,y1), (x2,y2))
 
 path doit correspondre à la chaine de caractère du chemin vers un fichier .map (Supporte les fichiers .map contenants les caractères : {'@','T','.','W','S'}).  
-(x1,y1),(x2,y2) sont des coordonées des points du fichier compris dans la taille du fichier map.  
-Si les coordonées sont des cases impraticable elles rendront un chemin vide.  
+(x1,y1),(x2,y2) sont des coordonées des points de la carte compris dans la taille du fichier map.  
+Si les coordonées sont des cases impraticable les algorithmes de recherche rendront un chemin vide.  
 
 Si un chemin existe alors le terminal affichera :
 1. Le nombre d'opérations effectuées
 2. Un vecteur de coordonnées représentant le chemin trouver via l'algo
 3. La taille du chemin trouvé
 4. Temps d'éxécution de l'algorithme
-5. une image en couleur sera généré dans un dossier tests
+Une image en couleur sera généré dans un dossier tests
 
 # Exemples
 
