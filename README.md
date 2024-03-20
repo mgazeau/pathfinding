@@ -36,7 +36,8 @@ Si un chemin existe alors le terminal affichera :
 1. Le nombre d'opérations effectuées
 2. Un vecteur de coordonnées représentant le chemin trouver via l'algo
 3. La taille du chemin trouvé
-4. Temps d'éxécution de l'algorithme  
+4. Temps d'éxécution de l'algorithme
+
 Une image en couleur sera généré dans un dossier tests
 
 # Exemples
