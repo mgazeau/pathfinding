@@ -14,40 +14,39 @@ function flood_fill(carte::Matrix{Int64}, depart::Tuple{Int64,Int64}, arrivee::T
     file::Vector{Tuple{Tuple{Int64, Int64}, Int64, Vector{Tuple{Int64, Int64}}}} = [(depart, 0, Vector{Tuple{Int, Int}}(undef, 0))]
     
     #Ensemble des cases déjà visitées
-    visited::Set{Tuple{Int, Int}} = Set{Tuple{Int, Int}}()
+    visite::Set{Tuple{Int, Int}} = Set{Tuple{Int, Int}}()
 
 
     while !isempty(file)
-    	
+    	i=i+1 #On compte une opération
         (x::Int64, y::Int64), distance::Int64, chemin::Vector{Tuple{Int64,Int64}} = popfirst!(file)
 
 	#Condition d'arrêt : la case actuelle est la case d'arrivée
         if (x, y) == arrivee
-            println("Nombre d'operations : $i")
-            return chemin
+            println("Nombre de cases évaluées : $i")
+            return chemin,visite
         end
 	
 	#Si le point regardé est une case non praticable on passe au prochain chemin
-        if (x, y) in visited || carte[x, y] == 0 || carte[x, y] == -1 
+        if (x, y) in visite || carte[x, y] == 0 || carte[x, y] == -1 
             continue
         end
 
 	#La case est ajouté aux case visitées
-        push!(visited, (x, y))
+        push!(visite, (x, y))
 	
 	#On regarde les 4 cases voisines
         for (dx::Int64, dy::Int64) in directions
             n_x, n_y = x + dx, y + dy
 
             if 1 <= n_x <= m && 1 <= n_y <= n && (carte[n_x, n_y] >= 1 )
-            	i=i+1 #On compte une opération
             	#Si la case voisine est praticable alors on ajoute dans la file de de traitement de nos chemins
                 push!(file, ((n_x, n_y), distance + 1, vcat(chemin, [(n_x, n_y)])))
             end
         end
     end
     
-    return []  # Pas de chemin trouvé
+    return [],visite  # Pas de chemin trouvé
 end
 
 
@@ -56,7 +55,7 @@ function recherche_aveugle(fichier::String,depart::Tuple{Int64,Int64}, arrivee::
 	
         getTime = time()
 	
-	chemin::Vector{Tuple{Int64,Int64}} = flood_fill(carte,depart,arrivee)
+	chemin::Vector{Tuple{Int64,Int64}},visite = flood_fill(carte,depart,arrivee)
 	
 	temps = round(time() - getTime,digits=6)
 	
@@ -68,13 +67,9 @@ function recherche_aveugle(fichier::String,depart::Tuple{Int64,Int64}, arrivee::
 	    println("Temps d'execution $temps")
 
         #Création de l'image avec le chemin
-        image = matrice_to_image(carte, chemin, arrivee, depart)
+        image = matrice_to_image(carte, chemin, visite, arrivee, depart)
         save_image(image,"tests/chemin_aveugle.png")
 	else
 	    println("Pas de chemin possible")
 	end
 end
-
-
-
-
