@@ -4,7 +4,7 @@ using Images
 """
 Fonction qui retourne la matrice qui associe des couleurs aux cases de la carte
 """
-function matrice_to_image(carte::Matrix{Int}, chemin::Vector{Tuple{Int64, Int64}}, depart::Tuple{Int, Int}, arrivee::Tuple{Int, Int})
+function matrice_to_image(carte::Matrix{Int}, chemin::Vector{Tuple{Int64, Int64}}, visite::Set{Tuple{Int, Int}}, depart::Tuple{Int, Int}, arrivee::Tuple{Int, Int})
     hauteur::Int64, largeur::Int64 = size(carte)
     img::Matrix{RGB} = zeros(RGB, hauteur, largeur)  # Initialise la matrice de couleurs
     
@@ -19,6 +19,9 @@ function matrice_to_image(carte::Matrix{Int}, chemin::Vector{Tuple{Int64, Int64}
                 else
                     img[i, j] = RGB(1.0, 1.0, 0.0)  # Jaune
                 end
+            #On differencie les points visités
+            elseif (i,j) in visite
+            	img[i, j] = RGB(0.8, 0.8, 0.0)  # Orange
             elseif carte[i,j] == -1
                 img[i, j] = RGB(0.0, 0.0, 0.0)  # Noir
             elseif carte[i,j] == 0
@@ -32,7 +35,7 @@ function matrice_to_image(carte::Matrix{Int}, chemin::Vector{Tuple{Int64, Int64}
             end
         end
     end
-    
+     
     return img
 end
 
