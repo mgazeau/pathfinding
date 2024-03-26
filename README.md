@@ -49,3 +49,5 @@ Quelques exemples sont stockés dans le dossier exemple : les images corresponde
 4. recherche_dijkstra("dat/theglaive.map",(88,263), (419,221))
 5. recherche_a_etoile("dat/theglaive.map",(189,193), (226,437))
 6. recherche_a_etoile("dat/theglaive.map",(88,263), (419,221))
+7. recherche_a_etoile("dat/8room_009.map",(46,22), (509,477))
+8. recherche_wa_etoile("dat/8room_009.map",(46,22), (509,477))
