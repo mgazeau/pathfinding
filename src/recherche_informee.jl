@@ -61,6 +61,8 @@ function dijkstra(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
     
     #Pour compter le nombre de case visité
     i::Int64 = 0
+    #Pour stocker les cases visitées pour l'affichage
+    visite::Set{Tuple{Int, Int}} = Set{Tuple{Int, Int}}()
 	
     (dep_x::Int64,dep_y::Int64) = depart
     (arr_x::Int64,arr_y::Int64) = arrivee
@@ -68,7 +70,7 @@ function dijkstra(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
     #On gère le cas où l'arrivee et/ou le depart sont des cases impraticable
     if carte[dep_x,dep_y] <= 0 || carte[arr_x,arr_y] <= 0
         println("Les cases de depart et/ou d'arrivee sont incorrects")
-        return []
+        return [],visite
     else
 
         m::Int64, n::Int64 = size(carte)
@@ -87,12 +89,9 @@ function dijkstra(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
 
         for (x, y) in directions
             n_x, n_y = x + dep_x, y + dep_y
-            
-            i=i+1
-
+           
             if 1 <= n_x <= m && 1 <= n_y <= n
                 if carte[n_x,n_y] > 0
-                    i=i+1 #On compte une opération
                     #Le poids de la nouvelle case correspond au point de l'ancienne + son cout de traversée
                     n_g = g[dep_x,dep_y][1] + carte[dep_x,dep_y]
                     #La matrice g est actualisée pour la nouvelle case
@@ -109,13 +108,13 @@ function dijkstra(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
         #Parcours de la carte jusqu'à l'arrivee ou jusqu'à ce que la file soit vide : cas où premier = (-1,-1)
         while premier != (-1,-1) && premier != arrivee
             (p_x,p_y) = premier
-
+	    push!(visite, (premier))
+	    i=i+1
+	    
             #On étudie les cases voisines de la case courante
             for (x, y) in directions
                 n_x, n_y = x + p_x, y + p_y
                 
-                i=i+1
-
                 if 1 <= n_x <= m && 1 <= n_y <= n
                     if carte[n_x,n_y] > 0
 
@@ -142,12 +141,12 @@ function dijkstra(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
 
 
         if premier == arrivee
-            println("Nombre d'operations : $i")
+            println("Nombre de cases évaluées : $i")
             #Renvoie le vecteur du chemin trouvé par l'algorithme
-            return plus_court_chemin(g, depart, arrivee)
+            return plus_court_chemin(g, depart, arrivee),visite
         else
             #Cas où il n'existe pas de chemin entre le depart et l'arrivee
-            return []
+            return [],visite
         end
     end
 end
@@ -158,7 +157,7 @@ function recherche_dijkstra(fichier::String,depart::Tuple{Int64,Int64}, arrivee:
 	
 	getTime = time()
 	
-	chemin::Vector{Tuple{Int64,Int64}} = dijkstra(carte,depart,arrivee)
+	chemin::Vector{Tuple{Int64,Int64}},visite = dijkstra(carte,depart,arrivee)
 	
 	temps = round(time() - getTime,digits=6)
 	
@@ -170,7 +169,7 @@ function recherche_dijkstra(fichier::String,depart::Tuple{Int64,Int64}, arrivee:
 	    println("Temps d'execution $temps")
 
         #Création de l'image avec le chemin
-        image = matrice_to_image(carte, chemin, arrivee, depart)
+        image = matrice_to_image(carte, chemin, visite, arrivee, depart)
         save_image(image,"tests/chemin_dijkstra.png")
 	else
 	    println("Pas de chemin possible")
@@ -201,6 +200,8 @@ function a_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
 	
     #Pour compter le nombre de case visité
     i::Int64 = 0
+    #Pour stocker les cases visitées pour l'affichage
+    visite::Set{Tuple{Int, Int}} = Set{Tuple{Int, Int}}()
 
     (dep_x::Int64,dep_y::Int64) = depart
     (arr_x::Int64,arr_y::Int64) = arrivee
@@ -208,7 +209,7 @@ function a_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
     #On gère le cas où l'arrivee et/ou le depart sont des cases impraticable
     if carte[dep_x,dep_y] <= 0 || carte[arr_x,arr_y] <= 0
         println("Les cases de depart et/ou d'arrivee sont incorrects")
-        return []
+        return [],visite
     else
 
         m::Int64, n::Int64 = size(carte)
@@ -231,8 +232,7 @@ function a_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
 	    
             if 1 <= n_x <= m && 1 <= n_y <= n
                 if carte[n_x,n_y] > 0
-                
-                    i=i+1 #On compte une opération
+
                     #Le poids de la nouvelle case correspond au point de l'ancienne + son cout de traversée
                     n_g = g[dep_x,dep_y][1] + carte[dep_x,dep_y]
                     #La matrice g est actualisée pour la nouvelle case
@@ -250,6 +250,9 @@ function a_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
         #Parcours de la carte jusqu'à l'arrivee ou jusqu'à ce que la file soit vide : cas où premier = (-1,-1)
         while premier != (-1,-1) && premier != arrivee
             (p_x,p_y) = premier
+            
+            push!(visite, (premier))
+	    i=i+1
 
             #On étudie les cases voisines de la case courante
             for (x, y) in directions
@@ -264,7 +267,6 @@ function a_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
 
                         #Si la case n'a jamais été visité
                         if g[n_x,n_y][1] == typemax(Int)
-            		     i=i+1#On compte une opération
                             g[n_x,n_y] = (n_g,(p_x,p_y))
                             ajouter_dico(file_dico,f,(n_x,n_y))
                         else
@@ -285,11 +287,11 @@ function a_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
 
         if premier == arrivee
             #Renvoie le vecteur du chemin trouvé par l'algorithme
-            println("Nombre d'operations : $i")
-            return plus_court_chemin(g, depart, arrivee)
+            println("Nombre de cases évaluées : $i")
+            return plus_court_chemin(g, depart, arrivee),visite
         else
             #Cas où il n'existe pas de chemin entre le depart et l'arrivee
-            return []
+            return [],viste
         end
     end
 end
@@ -300,7 +302,7 @@ function recherche_a_etoile(fichier::String,depart::Tuple{Int64,Int64}, arrivee:
 	
 	getTime = time()
 	
-	chemin::Vector{Tuple{Int64,Int64}} = a_etoile(carte,depart,arrivee)
+	chemin::Vector{Tuple{Int64,Int64}},visite = a_etoile(carte,depart,arrivee)
 	
 	temps = round(time() - getTime,digits = 6)
 	
@@ -312,7 +314,7 @@ function recherche_a_etoile(fichier::String,depart::Tuple{Int64,Int64}, arrivee:
 	    println("Temps d'execution $temps")
 
         #Création de l'image avec le chemin
-        image = matrice_to_image(carte, chemin, arrivee, depart)
+        image = matrice_to_image(carte, chemin, visite, arrivee, depart)
         save_image(image,"tests/chemin_A*.png")
 	else
 	    println("Pas de chemin possible")
@@ -333,6 +335,8 @@ function wa_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tupl
 	
     #Pour compter le nombre de case visité
     i::Int64 = 0
+    #Pour stocker les cases visitées pour l'affichage
+    visite::Set{Tuple{Int, Int}} = Set{Tuple{Int, Int}}()
 
     (dep_x::Int64,dep_y::Int64) = depart
     (arr_x::Int64,arr_y::Int64) = arrivee
@@ -340,7 +344,7 @@ function wa_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tupl
     #On gère le cas où l'arrivee et/ou le depart sont des cases impraticable
     if carte[dep_x,dep_y] <= 0 || carte[arr_x,arr_y] <= 0
         println("Les cases de depart et/ou d'arrivee sont incorrects")
-        return []
+        return [],visite
     else
 
         m::Int64, n::Int64 = size(carte)
@@ -365,8 +369,6 @@ function wa_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tupl
 	    
             if 1 <= n_x <= m && 1 <= n_y <= n
                 if carte[n_x,n_y] > 0
-                
-                    i=i+1 #On compte une opération
                     #Le poids de la nouvelle case correspond au point de l'ancienne + son cout de traversée
                     n_g = g[dep_x,dep_y][1] + carte[dep_x,dep_y]
                     #La matrice g est actualisée pour la nouvelle case
@@ -384,7 +386,9 @@ function wa_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tupl
         #Parcours de la carte jusqu'à l'arrivee ou jusqu'à ce que la file soit vide : cas où premier = (-1,-1)
         while premier != (-1,-1) && premier != arrivee
             (p_x,p_y) = premier
-
+	    push!(visite, (premier))
+	    i=i+1
+	    
             #On étudie les cases voisines de la case courante
             for (x, y) in directions
                 n_x, n_y = x + p_x, y + p_y
@@ -398,7 +402,6 @@ function wa_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tupl
 
                         #Si la case n'a jamais été visité
                         if g[n_x,n_y][1] == typemax(Int)
-            		     i=i+1#On compte une opération
                             g[n_x,n_y] = (n_g,(p_x,p_y))
                             ajouter_dico(file_dico,f,(n_x,n_y))
                         else
@@ -419,11 +422,11 @@ function wa_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tupl
 
         if premier == arrivee
             #Renvoie le vecteur du chemin trouvé par l'algorithme
-            println("Nombre d'operations : $i")
-            return plus_court_chemin(g, depart, arrivee)
+            println("Nombre de cases évaluées : $i")
+            return plus_court_chemin(g, depart, arrivee),visite
         else
             #Cas où il n'existe pas de chemin entre le depart et l'arrivee
-            return []
+            return [],visite
         end
     end
 end
@@ -434,7 +437,7 @@ function recherche_wa_etoile(fichier::String,depart::Tuple{Int64,Int64}, arrivee
 	
 	getTime = time()
 	
-	chemin::Vector{Tuple{Int64,Int64}} = a_etoile(carte,depart,arrivee)
+	chemin::Vector{Tuple{Int64,Int64}},visite = wa_etoile(carte,depart,arrivee)
 	
 	temps = round(time() - getTime,digits = 6)
 	
@@ -446,11 +449,9 @@ function recherche_wa_etoile(fichier::String,depart::Tuple{Int64,Int64}, arrivee
 	    println("Temps d'execution $temps")
 
         #Création de l'image avec le chemin
-        image = matrice_to_image(carte, chemin, arrivee, depart)
+        image = matrice_to_image(carte, chemin, visite, arrivee, depart)
         save_image(image,"tests/chemin_WA*.png")
 	else
 	    println("Pas de chemin possible")
 	end
 end
-
-
