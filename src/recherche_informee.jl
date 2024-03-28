@@ -291,7 +291,7 @@ function a_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
             return plus_court_chemin(g, depart, arrivee),visite
         else
             #Cas où il n'existe pas de chemin entre le depart et l'arrivee
-            return [],viste
+            return [],visite
         end
     end
 end
