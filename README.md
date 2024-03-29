@@ -32,7 +32,7 @@ Les 4 fonctions à utilisées sont :
 
 path doit correspondre à la chaine de caractère du chemin vers un fichier .map (Supporte les fichiers .map contenants les caractères : {'@','T','.','W','S'}).  
 (x1,y1),(x2,y2) sont des coordonées des points de la carte compris dans la taille du fichier map.  
-Pour WA* w est le coefficient qui pondère l'heuristique.  
+Pour WA* w est un flottant qui correspond au coefficient qui pondère l'heuristique.  
 Si les coordonées sont des cases impraticable les algorithmes de recherche rendront un chemin vide.  
 
 Si un chemin existe alors le terminal affichera :
