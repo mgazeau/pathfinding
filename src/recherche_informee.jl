@@ -1,7 +1,7 @@
 """
 Procedure qui ajoute un element à dictionnaire, si la clé est déjà présente on l'ajoute à la liste, sinon on créé la liste avec l'element
 """
-function ajouter_dico(dictionnaire::Dict{Int64, Vector{Tuple{Int,Int}}}, cle::Int64, element::Tuple{Int,Int})
+function ajouter_dico(dictionnaire::Dict{Float64, Vector{Tuple{Int,Int}}}, cle::Float64, element::Tuple{Int,Int})
     if haskey(dictionnaire, cle)
         push!(dictionnaire[cle], element)
     else
@@ -12,11 +12,11 @@ end
 """
 Fonction qui, si le dictionnaire contient au moins un élement, supprime et renvoie un element de la liste qui a la plus petite cle sinon renvoie (-1,-1) 
 """
-function defile_dico(dictionnaire::Dict{Int64, Vector{Tuple{Int,Int}}})
+function defile_dico(dictionnaire::Dict{Float64, Vector{Tuple{Int,Int}}})
     #cas de fin
     isempty(dictionnaire) && return (-1,-1)
 
-    cle_min::Int64 = minimum(collect(keys(dictionnaire)))
+    cle_min::Float64 = minimum(collect(keys(dictionnaire)))
     valeur::Tuple{Int,Int} = popfirst!(dictionnaire[cle_min])
     isempty(dictionnaire[cle_min]) && delete!(dictionnaire, cle_min)
 
@@ -27,7 +27,7 @@ end
 Procedure qui supprime element du dictionnaire
 Precondition : le dictionnaire n'est pas vide 
 """
-function enlever_dico(dictionnaire, cle, element)
+function enlever_dico(dictionnaire::Dict{Float64, Vector{Tuple{Int,Int}}}, cle::Float64, element::Tuple{Int,Int})
     filter!(x -> x != element, dictionnaire[cle])
     isempty(dictionnaire[cle]) && delete!(dictionnaire, cle)
 end
@@ -61,16 +61,14 @@ function dijkstra(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
     
     #Pour compter le nombre de case visité
     i::Int64 = 0
-    #Pour stocker les cases visitées pour l'affichage
-    visite::Set{Tuple{Int, Int}} = Set{Tuple{Int, Int}}()
-	
+    
     (dep_x::Int64,dep_y::Int64) = depart
     (arr_x::Int64,arr_y::Int64) = arrivee
 
     #On gère le cas où l'arrivee et/ou le depart sont des cases impraticable
     if carte[dep_x,dep_y] <= 0 || carte[arr_x,arr_y] <= 0
         println("Les cases de depart et/ou d'arrivee sont incorrects")
-        return [],visite
+        return [],[]
     else
 
         m::Int64, n::Int64 = size(carte)
@@ -82,7 +80,7 @@ function dijkstra(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
 
         # file_dico represente une file de priorité, qui permet d'acceder rapidement à la case en cours de traitement qui possède le meilleur coût depuis la case de départ
         # Ici le coût, representé par les clés du dictionnaire, correspond à au poids de la case stocké dans g
-        file_dico::Dict{Int, Vector{Tuple{Int,Int}}} = Dict()
+        file_dico::Dict{Float64, Vector{Tuple{Int,Int}}} = Dict()
 
         directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
         
@@ -97,7 +95,7 @@ function dijkstra(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
                     #La matrice g est actualisée pour la nouvelle case
                     g[n_x,n_y] = (n_g,(dep_x,dep_y))
                     #On ajoute à la file la nouvelle case en fonction de son cout
-                    ajouter_dico(file_dico,n_g,(n_x,n_y))
+                    ajouter_dico(file_dico,float(n_g),(n_x,n_y))
                 end
             end
         end
@@ -108,7 +106,7 @@ function dijkstra(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
         #Parcours de la carte jusqu'à l'arrivee ou jusqu'à ce que la file soit vide : cas où premier = (-1,-1)
         while premier != (-1,-1) && premier != arrivee
             (p_x,p_y) = premier
-	    push!(visite, (premier))
+
 	    i=i+1
 	    
             #On étudie les cases voisines de la case courante
@@ -123,14 +121,14 @@ function dijkstra(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
                         #Si la case n'a jamais été visité
                         if g[n_x,n_y][1] == typemax(Int)
                             g[n_x,n_y] = (n_g,(p_x,p_y))
-                            ajouter_dico(file_dico,n_g,(n_x,n_y))
+                            ajouter_dico(file_dico,float(n_g),(n_x,n_y))
                         else
                         #Si la case a déjà été visité on vérifie si le poids de l'ancien chemin est meilleur
                             if n_g < g[n_x,n_y][1] 
                                 #On remplace les anciennes information si le cout du nouveau chemin est meilleur
-                                enlever_dico(file_dico,g[n_x,n_y][1],(n_x,n_y))
+                                enlever_dico(file_dico,float(g[n_x,n_y][1]),(n_x,n_y))
                                 g[n_x,n_y]=(n_g,(p_x,p_y))
-                                ajouter_dico(file_dico,n_g,(n_x,n_y))
+                                ajouter_dico(file_dico,float(n_g),(n_x,n_y))
                             end
                         end
                     end
@@ -143,10 +141,10 @@ function dijkstra(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
         if premier == arrivee
             println("Nombre de cases évaluées : $i")
             #Renvoie le vecteur du chemin trouvé par l'algorithme
-            return plus_court_chemin(g, depart, arrivee),visite
+            return plus_court_chemin(g, depart, arrivee),g
         else
             #Cas où il n'existe pas de chemin entre le depart et l'arrivee
-            return [],visite
+            return [],g
         end
     end
 end
@@ -157,19 +155,24 @@ function recherche_dijkstra(fichier::String,depart::Tuple{Int64,Int64}, arrivee:
 	
 	getTime = time()
 	
-	chemin::Vector{Tuple{Int64,Int64}},visite = dijkstra(carte,depart,arrivee)
+	chemin::Vector{Tuple{Int64,Int64}},g = dijkstra(carte,depart,arrivee)
 	
 	temps = round(time() - getTime,digits=6)
 	
 	if chemin != []
         #Affichage des donées
 	    println("Chemin obtenu avec dijkstra : $chemin")
+
 	    taille = length(chemin)
-	    println("Taille du chemin $taille")
+	    poids = 0
+        for (i,j) in chemin
+            poids += carte[i,j]
+        end
+	    println("Nombre de case du chemin $taille pour un poids de $poids")
 	    println("Temps d'execution $temps")
 
         #Création de l'image avec le chemin
-        image = matrice_to_image(carte, chemin, visite, arrivee, depart)
+        image = matrice_to_image(carte, chemin, g, arrivee, depart)
         save_image(image,"tests/chemin_dijkstra.png")
 	else
 	    println("Pas de chemin possible")
@@ -200,8 +203,6 @@ function a_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
 	
     #Pour compter le nombre de case visité
     i::Int64 = 0
-    #Pour stocker les cases visitées pour l'affichage
-    visite::Set{Tuple{Int, Int}} = Set{Tuple{Int, Int}}()
 
     (dep_x::Int64,dep_y::Int64) = depart
     (arr_x::Int64,arr_y::Int64) = arrivee
@@ -209,7 +210,7 @@ function a_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
     #On gère le cas où l'arrivee et/ou le depart sont des cases impraticable
     if carte[dep_x,dep_y] <= 0 || carte[arr_x,arr_y] <= 0
         println("Les cases de depart et/ou d'arrivee sont incorrects")
-        return [],visite
+        return [],[]
     else
 
         m::Int64, n::Int64 = size(carte)
@@ -221,7 +222,7 @@ function a_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
 
         # file_dico represente une file de priorité, qui permet d'acceder rapidement à la case en cours de traitement qui possède le meilleur coût depuis la case de départ
         # Ici le coût,representé par les clés du dictionnaire, correspond à l'addition du poids de la case stocké dans g et de sa distance par rapport à l'arrivee 
-        file_dico::Dict{Int, Vector{Tuple{Int,Int}}} = Dict()
+        file_dico::Dict{Float64, Vector{Tuple{Int,Int}}} = Dict()
 
         directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
@@ -239,7 +240,7 @@ function a_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
                     g[n_x,n_y] = (n_g,(dep_x,dep_y))
                     #On ajoute à la file la nouvelle case en fonction de son cout
                     f = n_g + distance((n_x,n_y),arrivee)
-                    ajouter_dico(file_dico,f,(n_x,n_y))
+                    ajouter_dico(file_dico,float64(f),(n_x,n_y))
                 end
             end
         end
@@ -251,7 +252,6 @@ function a_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
         while premier != (-1,-1) && premier != arrivee
             (p_x,p_y) = premier
             
-            push!(visite, (premier))
 	    i=i+1
 
             #On étudie les cases voisines de la case courante
@@ -268,14 +268,14 @@ function a_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
                         #Si la case n'a jamais été visité
                         if g[n_x,n_y][1] == typemax(Int)
                             g[n_x,n_y] = (n_g,(p_x,p_y))
-                            ajouter_dico(file_dico,f,(n_x,n_y))
+                            ajouter_dico(file_dico,float(f),(n_x,n_y))
                         else
                         #Si la case a déjà été visité on vérifie si le cout de l'ancien chemin est meilleur
                             if f < g[n_x,n_y][1] + h
                                 #On remplace les anciennes information si le cout du nouveau chemin est meilleur
-                                enlever_dico(file_dico,g[n_x,n_y][1]+h,(n_x,n_y))
+                                enlever_dico(file_dico,float(g[n_x,n_y][1]+h),(n_x,n_y))
                                 g[n_x,n_y]=(n_g,(p_x,p_y))
-                                ajouter_dico(file_dico,f,(n_x,n_y))
+                                ajouter_dico(file_dico,float(f),(n_x,n_y))
                             end
                         end
                     end
@@ -288,10 +288,10 @@ function a_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple
         if premier == arrivee
             #Renvoie le vecteur du chemin trouvé par l'algorithme
             println("Nombre de cases évaluées : $i")
-            return plus_court_chemin(g, depart, arrivee),visite
+            return plus_court_chemin(g, depart, arrivee),g
         else
             #Cas où il n'existe pas de chemin entre le depart et l'arrivee
-            return [],visite
+            return [],g
         end
     end
 end
@@ -310,7 +310,11 @@ function recherche_a_etoile(fichier::String,depart::Tuple{Int64,Int64}, arrivee:
         #Affichage des donées
 	    println("Chemin obtenu avec A* : $chemin")
 	    taille = length(chemin)
-	    println("Taille du chemin $taille")
+	    poids = 0
+        for (i,j) in chemin
+            poids += carte[i,j]
+        end
+	    println("Nombre de case du chemin $taille pour un poids de $poids")
 	    println("Temps d'execution $temps")
 
         #Création de l'image avec le chemin
@@ -328,15 +332,13 @@ end
 
 
 """
-Algorithme de recherche informée heuristique pondérée WA* du plus court chemin entre la case de depart et d'arrivee en fonction du cout de traversé des cases et d'un certain coefficient de la distance au point d'arrivee
+Algorithme de recherche informée heuristique pondérée WA* du plus court chemin entre la case de depart et d'arrivee en fonction du cout de traversé des cases et d'un certain coefficient w de la distance au point d'arrivee
 La matrice carte represente les cases du fichier map par le cout nécessaire pour les traverser 
 """
-function wa_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple{Int64,Int64})
+function wa_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tuple{Int64,Int64},w::Float64)
 	
     #Pour compter le nombre de case visité
     i::Int64 = 0
-    #Pour stocker les cases visitées pour l'affichage
-    visite::Set{Tuple{Int, Int}} = Set{Tuple{Int, Int}}()
 
     (dep_x::Int64,dep_y::Int64) = depart
     (arr_x::Int64,arr_y::Int64) = arrivee
@@ -344,7 +346,7 @@ function wa_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tupl
     #On gère le cas où l'arrivee et/ou le depart sont des cases impraticable
     if carte[dep_x,dep_y] <= 0 || carte[arr_x,arr_y] <= 0
         println("Les cases de depart et/ou d'arrivee sont incorrects")
-        return [],visite
+        return [],[]
     else
 
         m::Int64, n::Int64 = size(carte)
@@ -356,11 +358,9 @@ function wa_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tupl
 
         # file_dico represente une file de priorité, qui permet d'acceder rapidement à la case en cours de traitement qui possède le meilleur coût depuis la case de départ
         # Ici le coût,representé par les clés du dictionnaire, correspond à l'addition du poids de la case stocké dans g et de sa distance par rapport à l'arrivee 
-        file_dico::Dict{Int, Vector{Tuple{Int,Int}}} = Dict()
+        file_dico::Dict{Float64, Vector{Tuple{Int,Int}}} = Dict()
 
         directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
-
-	w::Int64 = 2
 
         # On initialise le dictionnaire avec les cases voisines du depart si elles sont praticable 
         for (x, y) in directions
@@ -386,7 +386,7 @@ function wa_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tupl
         #Parcours de la carte jusqu'à l'arrivee ou jusqu'à ce que la file soit vide : cas où premier = (-1,-1)
         while premier != (-1,-1) && premier != arrivee
             (p_x,p_y) = premier
-	    push!(visite, (premier))
+
 	    i=i+1
 	    
             #On étudie les cases voisines de la case courante
@@ -423,21 +423,21 @@ function wa_etoile(carte::Matrix{Int64},depart::Tuple{Int64,Int64},arrivee::Tupl
         if premier == arrivee
             #Renvoie le vecteur du chemin trouvé par l'algorithme
             println("Nombre de cases évaluées : $i")
-            return plus_court_chemin(g, depart, arrivee),visite
+            return plus_court_chemin(g, depart, arrivee),g
         else
             #Cas où il n'existe pas de chemin entre le depart et l'arrivee
-            return [],visite
+            return [],g
         end
     end
 end
 
 
-function recherche_wa_etoile(fichier::String,depart::Tuple{Int64,Int64}, arrivee::Tuple{Int64,Int64})
+function recherche_wa_etoile(fichier::String,depart::Tuple{Int64,Int64}, arrivee::Tuple{Int64,Int64},w::Float64)
 	carte::Matrix{Int64} = lire_fichier_map(fichier)
 	
 	getTime = time()
 	
-	chemin::Vector{Tuple{Int64,Int64}},visite = wa_etoile(carte,depart,arrivee)
+	chemin::Vector{Tuple{Int64,Int64}},g = wa_etoile(carte,depart,arrivee,w)
 	
 	temps = round(time() - getTime,digits = 6)
 	
@@ -445,11 +445,15 @@ function recherche_wa_etoile(fichier::String,depart::Tuple{Int64,Int64}, arrivee
         #Affichage des donées
 	    println("Chemin obtenu avec WA* : $chemin")
 	    taille = length(chemin)
-	    println("Taille du chemin $taille")
+        poids = 0
+        for (i,j) in chemin
+            poids += carte[i,j]
+        end
+	    println("Nombre de case du chemin $taille pour un poids de $poids")
 	    println("Temps d'execution $temps")
 
         #Création de l'image avec le chemin
-        image = matrice_to_image(carte, chemin, visite, arrivee, depart)
+        image = matrice_to_image(carte, chemin, g, arrivee, depart)
         save_image(image,"tests/chemin_WA*.png")
 	else
 	    println("Pas de chemin possible")

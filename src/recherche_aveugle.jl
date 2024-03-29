@@ -67,7 +67,7 @@ function recherche_aveugle(fichier::String,depart::Tuple{Int64,Int64}, arrivee::
 	    println("Temps d'execution $temps")
 
         #Création de l'image avec le chemin
-        image = matrice_to_image(carte, chemin, visite, arrivee, depart)
+        image = matrice_to_imageflood(carte, chemin, visite, arrivee, depart)
         save_image(image,"tests/chemin_aveugle.png")
 	else
 	    println("Pas de chemin possible")
